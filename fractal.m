@@ -10,7 +10,7 @@ work_tau_len = 5e6;
 fwb = waitbar(0,'Loading your data');
 
 load([filename,'.mat']);
-date_str = datestr(datetime('now'),'yyyy_mm_dd-HH_MM_SS');
+date_str = char(datetime('now'),'yyyy_MM_dd-HH_mm_SS');
 
 waitbar(0,fwb,'Processing your data');
 

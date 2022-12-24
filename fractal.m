@@ -1,7 +1,7 @@
 clear; clc;
 %-----------------------------НАСТРОЙКА------------------------------------
 filename = 'InputData\Chembo_OutputData_beta_15-0';
-save_output = 1; progres_bar = 1;
+save_output = 0; progres_bar = 1;
 
 log_l = linspace(0.5,-1,500)'; m = 5:5:50;
 max_length_S_fract = 1000; razr = 1;

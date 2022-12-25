@@ -3,10 +3,10 @@ clear; clc;
 
 % Путь к файлу. Файл должен быть с расширением .mat и содержать в себе
 % векторы t и V, соответствующие времени и измеренной величине:
-filename = 'InputData\Chembo_OutputData_beta_15-0.mat'; 
+filename = 'InputData\Chembo_OutputData_beta_15-0'; 
 
 % Логическая переменная, разрешающая сохранение результатов в  файл .mat:
-save_output = false; 
+save_output = true; 
 
 % Логическая переменная, включающая окно прогресса:
 progres_bar = true;
@@ -30,7 +30,7 @@ work_tau_len = 5e6;
 %% Start of the program
 fwb = waitbar(0,'Loading your data');
 
-load(filename);
+load([filename,'.mat']);
 date_str = char(datetime('now'),'yyyy_MM_dd-HH_mm_SS');
 
 waitbar(0,fwb,'Processing your data');

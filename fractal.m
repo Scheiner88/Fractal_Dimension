@@ -1,15 +1,36 @@
 clear; clc;
-%-----------------------------НАСТРОЙКА------------------------------------
-filename = 'InputData\Chembo_OutputData_beta_15-0';
-save_output = 0; progres_bar = 1;
+%% Block of setup
 
-log_l = linspace(0.5,-1,500)'; m = 5:5:50;
-max_length_S_fract = 1000; razr = 1;
+% Путь к файлу. Файл должен быть с расширением .mat и содержать в себе
+% векторы t и V, соответствующие времени и измеренной величине:
+filename = 'InputData\Chembo_OutputData_beta_15-0.mat'; 
+
+% Логическая переменная, разрешающая сохранение результатов в  файл .mat:
+save_output = false; 
+
+% Логическая переменная, включающая окно прогресса:
+progres_bar = true;
+
+% Вектор логарифма радиуса сферы:
+log_l = linspace(0.5,-1,500)';
+
+% Вектор размерности вложения:
+m = 1:1:10;
+
+% Максимальное количество точек из входного файла, участвующих в
+% вычислениях корреляционной суммы:
+max_length_S_fract = 1000; 
+
+% "Разряжение" входных данных. Иными словами, из входных данных будет
+% отобрана каждая dul точка:
+dul = 1;
+
+% Количество точек, участвующих в вычислении характерного времени tau:
 work_tau_len = 5e6;
-%---------------------------КОНЕЦ НАСТРОЙКИ--------------------------------
+%% Start of the program
 fwb = waitbar(0,'Loading your data');
 
-load([filename,'.mat']);
+load(filename);
 date_str = char(datetime('now'),'yyyy_MM_dd-HH_mm_SS');
 
 waitbar(0,fwb,'Processing your data');
@@ -21,7 +42,7 @@ i_doub = round(max_length_S_fract/100); i_doub_proc = i_doub;
 
 tau_idx = tau_mean_power(V,work_tau_len);
 
-S = make_S(V,tau_idx,max(m),max_length_S_fract,razr);
+S = make_S(V,tau_idx,max(m),max_length_S_fract,dul);
 
 tic
 
@@ -45,7 +66,7 @@ close(fwb);
 
 if save_output == 1
     save([filename,'_Fractal_',date_str],'m','max_length_S_fract', ...
-        'tau_idx','razr','log_C','log_l');
+        'tau_idx','dul','log_C','log_l');
 end
 
 figure
@@ -53,7 +74,7 @@ plot(log_l,log_C,'-','LineWidth',2);
 xlabel('log({\itr})'); ylabel('log({\itC})');
 legend('{\itm} = ' + string(m),'Location','southeastoutside');
 graph_setup(14);
-
+%% Block of function 
 function tau_idx = tau_mean_power(x,work_tau_len)
 x = x(end - work_tau_len:end);
 n = length(x);
